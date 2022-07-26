@@ -1,6 +1,7 @@
 package br.com.felipesa.catalogo.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,14 @@ public class CategoriaService {
 	public List<CategoriaDTO> findAll(){		
 		List<Categoria> list = repository.findAll();
 		return list.stream().map(x -> new CategoriaDTO(x)).collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public CategoriaDTO findBYId(Long id) {
+		Optional<Categoria> obj = repository.findById(id);
+		Categoria entity = obj.get();
+		
+		return new CategoriaDTO(entity);
 	}
 	
 }
