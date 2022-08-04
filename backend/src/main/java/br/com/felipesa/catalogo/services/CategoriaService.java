@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.felipesa.catalogo.dto.CategoriaDTO;
 import br.com.felipesa.catalogo.entidades.Categoria;
 import br.com.felipesa.catalogo.repositories.CategoriaRepository;
+import br.com.felipesa.catalogo.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -27,7 +28,7 @@ public class CategoriaService {
 	@Transactional(readOnly = true)
 	public CategoriaDTO findBYId(Long id) {
 		Optional<Categoria> obj = repository.findById(id);
-		Categoria entity = obj.get();
+		Categoria entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
 		
 		return new CategoriaDTO(entity);
 	}
