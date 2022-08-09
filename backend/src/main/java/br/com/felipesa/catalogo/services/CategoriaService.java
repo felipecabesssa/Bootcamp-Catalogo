@@ -17,20 +17,28 @@ import br.com.felipesa.catalogo.services.exceptions.EntityNotFoundException;
 public class CategoriaService {
 	
 	@Autowired
-	private CategoriaRepository repository;
+	private CategoriaRepository repositorio;
 
 	@Transactional(readOnly = true)
-	public List<CategoriaDTO> findAll(){		
-		List<Categoria> list = repository.findAll();
+	public List<CategoriaDTO> buscaTodasService(){		
+		List<Categoria> list = repositorio.findAll();
 		return list.stream().map(x -> new CategoriaDTO(x)).collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public CategoriaDTO findBYId(Long id) {
-		Optional<Categoria> obj = repository.findById(id);
+	public CategoriaDTO buscaPorIdService(Long id) {
+		Optional<Categoria> obj = repositorio.findById(id);
 		Categoria entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
-		
 		return new CategoriaDTO(entity);
+	}
+
+	@Transactional
+	public CategoriaDTO insereCategoriaService(CategoriaDTO dto) {
+		Categoria entidade = new Categoria();
+		entidade.setNome(dto.getNome());
+		entidade = repositorio.save(entidade);
+		
+		return new CategoriaDTO(entidade);
 	}
 	
 }
