@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import br.com.felipesa.catalogo.dto.CategoriaDTO;
 import br.com.felipesa.catalogo.entidades.Categoria;
 import br.com.felipesa.catalogo.repositories.CategoriaRepository;
 import br.com.felipesa.catalogo.services.exceptions.EntidadeNaoEncontradaException;
+import br.com.felipesa.catalogo.services.exceptions.IntegridadeReferencialException;
 
 @Service
 public class CategoriaService {
@@ -52,7 +55,19 @@ public class CategoriaService {
 			return new CategoriaDTO(entidade);
 		}
 		catch (EntityNotFoundException e){
-			throw new EntidadeNaoEncontradaException("Id" + id + "não encontrado");
+			throw new EntidadeNaoEncontradaException("Id " + id + " não encontrado");
+		}
+	}
+
+	public void deletaCategoriaService(Long id) {
+		try {
+			repositorio.deleteById(id);
+		}
+		catch (EmptyResultDataAccessException e) {
+			throw new EntidadeNaoEncontradaException("Id " + id + " não encontrado");
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new IntegridadeReferencialException("Violação de Integridade, a categoria tem produtos associados");
 		}
 	}
 	

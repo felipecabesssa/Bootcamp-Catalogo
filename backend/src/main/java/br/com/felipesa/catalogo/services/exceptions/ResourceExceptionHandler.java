@@ -17,14 +17,29 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<StandardError> entityNotFound(EntidadeNaoEncontradaException e, HttpServletRequest request){
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
-		err.setStatus(HttpStatus.NOT_FOUND.value());
+		err.setStatus(status.value());
 		err.setError("Recurso não encontrado");
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());
 		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+		return ResponseEntity.status(status).body(err);
+		
+	}
+	
+	@ExceptionHandler(IntegridadeReferencialException.class)
+	public ResponseEntity<StandardError> IntegridadeReferencial(IntegridadeReferencialException e, HttpServletRequest request){
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError();
+		err.setTimestamp(Instant.now());
+		err.setStatus(status.value());
+		err.setError("Erro de Integridade / Referencia");
+		err.setMessage(e.getMessage());
+		err.setPath(request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
 		
 	}
 
