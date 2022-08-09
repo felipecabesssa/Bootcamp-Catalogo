@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.felipesa.catalogo.dto.CategoriaDTO;
 import br.com.felipesa.catalogo.entidades.Categoria;
 import br.com.felipesa.catalogo.repositories.CategoriaRepository;
-import br.com.felipesa.catalogo.services.exceptions.EntityNotFoundException;
+import br.com.felipesa.catalogo.services.exceptions.EntidadeNaoEncontradaException;
 
 @Service
 public class CategoriaService {
@@ -28,7 +30,7 @@ public class CategoriaService {
 	@Transactional(readOnly = true)
 	public CategoriaDTO buscaPorIdService(Long id) {
 		Optional<Categoria> obj = repositorio.findById(id);
-		Categoria entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
+		Categoria entity = obj.orElseThrow(() -> new EntidadeNaoEncontradaException("Entidade não encontrada"));
 		return new CategoriaDTO(entity);
 	}
 
@@ -39,6 +41,19 @@ public class CategoriaService {
 		entidade = repositorio.save(entidade);
 		
 		return new CategoriaDTO(entidade);
+	}
+
+	@Transactional
+	public CategoriaDTO alteraCategoriaService(Long id, CategoriaDTO dto) {
+		try {
+			Categoria entidade = repositorio.getReferenceById(id);
+			entidade.setNome(dto.getNome());
+			entidade = repositorio.save(entidade);
+			return new CategoriaDTO(entidade);
+		}
+		catch (EntityNotFoundException e){
+			throw new EntidadeNaoEncontradaException("Id" + id + "não encontrado");
+		}
 	}
 	
 }

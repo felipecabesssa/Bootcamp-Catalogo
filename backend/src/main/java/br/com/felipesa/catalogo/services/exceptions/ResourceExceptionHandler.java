@@ -15,8 +15,8 @@ import br.com.felipesa.catalogo.controllers.exceptions.StandardError;
 @ControllerAdvice
 public class ResourceExceptionHandler {
 	
-	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e, HttpServletRequest request){
+	@ExceptionHandler(EntidadeNaoEncontradaException.class)
+	public ResponseEntity<StandardError> entityNotFound(EntidadeNaoEncontradaException e, HttpServletRequest request){
 		StandardError err = new StandardError();
 		err.setTimestamp(Instant.now());
 		err.setStatus(HttpStatus.NOT_FOUND.value());

@@ -1,9 +1,9 @@
 package br.com.felipesa.catalogo.services.exceptions;
 
-public class EntityNotFoundException extends RuntimeException{
+public class EntidadeNaoEncontradaException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	
-	public EntityNotFoundException(String msg) {
+	public EntidadeNaoEncontradaException(String msg) {
 		super(msg);
 	}
 
