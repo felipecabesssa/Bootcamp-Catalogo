@@ -1,14 +1,14 @@
 package br.com.felipesa.catalogo.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +25,9 @@ public class CategoriaService {
 	private CategoriaRepository repositorio;
 
 	@Transactional(readOnly = true)
-	public List<CategoriaDTO> buscaTodasService(){		
-		List<Categoria> list = repositorio.findAll();
-		return list.stream().map(x -> new CategoriaDTO(x)).collect(Collectors.toList());
+	public Page<CategoriaDTO> buscaTodasServicePaginado(PageRequest pageRequest){		
+		Page<Categoria> list = repositorio.findAll(pageRequest);
+		return list.map(x -> new CategoriaDTO(x));
 	}
 
 	@Transactional(readOnly = true)
