@@ -1,24 +1,15 @@
-package br.com.felipesa.crud.entities;
+package br.com.felipesa.crud.dtos;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 
-@Entity
-@Table(name = "tb_client")
-public class Client implements Serializable{
+import br.com.felipesa.crud.entities.Client;
+
+public class ClientDTO  implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String cpf;
@@ -29,10 +20,10 @@ public class Client implements Serializable{
 	
 	private Integer children;
 	
-	public Client() {
+	public ClientDTO() {
 	}
-
-	public Client(Long id, String name, String cpf, Double income, Instant birthDate, Integer children) {
+	
+	public ClientDTO(Long id, String name, String cpf, Double income, Instant birthDate, Integer children) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
@@ -41,10 +32,19 @@ public class Client implements Serializable{
 		this.children = children;
 	}
 
+	public ClientDTO(Client entidade) {
+		this.id = entidade.getId();
+		this.name = entidade.getName();
+		this.cpf = entidade.getCpf();
+		this.income = entidade.getIncome();
+		this.birthDate = entidade.getBirthDate();
+		this.children = entidade.getChildren();
+	}
+
+
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -52,7 +52,6 @@ public class Client implements Serializable{
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -60,7 +59,6 @@ public class Client implements Serializable{
 	public String getCpf() {
 		return cpf;
 	}
-
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
@@ -68,7 +66,6 @@ public class Client implements Serializable{
 	public Double getIncome() {
 		return income;
 	}
-
 	public void setIncome(Double income) {
 		this.income = income;
 	}
@@ -76,43 +73,15 @@ public class Client implements Serializable{
 	public Instant getBirthDate() {
 		return birthDate;
 	}
-
-	@PreUpdate
-	public void instantNascimento() {
-		birthDate = Instant.now();
+	public void setBirthDate(Instant birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public Integer getChildren() {
 		return children;
 	}
-
 	public void setChildren(Integer children) {
 		this.children = children;
 	}
 	
-	
-
-	public void setBirthDate(Instant birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Client other = (Client) obj;
-		return Objects.equals(id, other.id);
-	}
-	
-	
-
 }
