@@ -8,6 +8,8 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,12 @@ public class ClientService {
 		List<Client> lista = repositorioCliente.findAll();
 		return lista.stream().map(x -> new ClientDTOMin(x)).collect(Collectors.toList());
 	}
+	
+	@Transactional(readOnly = true)
+	public Page<ClientDTO> busqueTodosPaginado(PageRequest pageRequest) {
+		Page<Client> lista = repositorioCliente.findAll(pageRequest);
+		return lista.map(x -> new ClientDTO(x));
+	}
 
 	@Transactional(readOnly = true)
 	public ClientDTOMin busquePorIdMin(Long id) {
@@ -35,6 +43,14 @@ public class ClientService {
 		Client entidade = obj.get();
 
 		return new ClientDTOMin(entidade);
+	}
+	
+	@Transactional(readOnly = true)
+	public ClientDTO busquePorId(Long id) {
+		Optional<Client> obj = repositorioCliente.findById(id);
+		Client entidade = obj.get();
+
+		return new ClientDTO(entidade);
 	}
 	
 	@Transactional
