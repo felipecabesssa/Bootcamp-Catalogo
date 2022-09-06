@@ -33,6 +33,7 @@ build/
 .vscode/
 
 application.properties
+application-dev.properties
 .metadata
 
 .DS_Store
