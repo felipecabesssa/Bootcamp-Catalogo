@@ -1,11 +1,6 @@
---- URI Online Judge SQL
---- Copyright URI Online Judge
---- www.urionlinejudge.com.br
---- Problem 2609
-
 CREATE TABLE categories (
   id numeric PRIMARY KEY,
-  name varchar
+  name varchar(50)
 );
 
 CREATE TABLE products (
@@ -15,6 +10,8 @@ CREATE TABLE products (
   price numeric(7,2),
   id_categories numeric REFERENCES categories (id)
 );
+
+alter table products add foreign key(id_categories) references categories (id);
 
 INSERT INTO categories (id, name)
 VALUES 
@@ -33,5 +30,16 @@ VALUES
   (5,	'Chair',	3000,	210.64,	4),
   (6,	'Single bed',	750,	460,	1);
   
-  /*  Execute this query to drop the tables */
-  -- DROP TABLE categories,products; --
+SELECT * FROM products
+SELECT * FROM categories
+
+SELECT *
+FROM categories
+INNER JOIN products ON products.id_categories = categories.id 
+
+-- ---------------------------------------------------------------
+
+SELECT categories.name, SUM(products.amount) 
+FROM categories
+INNER JOIN products ON products.id_categories = categories.id 
+GROUP BY categories.name 

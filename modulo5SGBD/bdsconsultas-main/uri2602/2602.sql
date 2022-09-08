@@ -1,13 +1,8 @@
---- URI Online Judge SQL
---- Copyright URI Online Judge
---- www.urionlinejudge.com.br
---- Problem 2602
-
 CREATE TABLE customers (
   id NUMERIC PRIMARY KEY,
-  name CHARACTER VARYING (255),
-  street CHARACTER VARYING (255),
-  city CHARACTER VARYING (255),
+  name CHAR (255),
+  street CHAR (255),
+  city CHAR (255),
   state CHAR (2),
   credit_limit NUMERIC
 );
@@ -22,4 +17,9 @@ VALUES
 
   
   /*  Execute this query to drop the tables */
-  -- DROP TABLE customers; --
+ 
+SELECT * FROM customers
+
+SELECT name
+FROM customers 
+WHERE state = 'RS'

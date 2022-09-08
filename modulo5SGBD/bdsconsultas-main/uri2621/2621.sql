@@ -1,8 +1,3 @@
---- URI Online Judge SQL
---- Copyright URI Online Judge
---- www.urionlinejudge.com.br
---- Problem 2621
-
 CREATE TABLE providers (
   id numeric PRIMARY KEY,
   name varchar(255),
@@ -36,6 +31,21 @@ VALUES
   (4,	'Executive Chair',	17,	9.90,	3),
   (5,	'Solar Panel',	30,	3000.25,	4);
   
-  
-/*  Execute this query to drop the tables */
--- DROP TABLE products, providers; -- 
+SELECT * FROM products
+
+-- exemplo 1
+SELECT name 
+FROM products
+WHERE products.amount >= 10 AND products.amount <= 20
+
+-- exemplo 2
+SELECT name 
+FROM products
+WHERE products.amount BETWEEN 10 AND 20
+
+-- exemplo 3 mesclando as duas tabelas
+SELECT products.name  
+FROM products
+INNER JOIN providers ON products.id_providers = providers.id 
+WHERE products.amount BETWEEN 10 AND 20
+AND providers.name LIKE 'P%'

@@ -12,16 +12,22 @@ CREATE TABLE departamentos (
   cpf_gerente VARCHAR(15) REFERENCES empregados (cpf)
 );
 
+alter table departamentos add foreign key(cpf_gerente) references empregados (cpf);
+
 CREATE TABLE trabalha (
   cpf_emp VARCHAR(15) REFERENCES empregados(cpf),
   pnumero numeric
 );
+
+alter table trabalha add foreign key(cpf_emp) references empregados(cpf);
 
 CREATE TABLE projetos (
   pnumero NUMERIC PRIMARY KEY,
   pnome VARCHAR(45),
   dnumero NUMERIC REFERENCES departamentos (dnumero)
 );
+
+alter table projetos add foreign key(dnumero) references departamentos(dnumero);
 
 INSERT INTO empregados(cpf, enome, salary, cpf_supervisor, dnumero)
 VALUES 
@@ -47,3 +53,56 @@ INSERT INTO projetos (pnumero, pnome, dnumero)
 VALUES 
   (2010, 'Alpha', 1010),
   (2020, 'Beta', 1020);
+  
+-- ----------------------------------------------------- --
+
+SELECT empregados.cpf, empregados.enome, departamentos.dnome 
+FROM empregados
+INNER JOIN departamentos ON empregados.dnumero = departamentos.dnumero
+
+-- -------- Funcionarios que TRABALHAM em algum projeto --------- --
+
+SELECT empregados.cpf, empregados.enome, departamentos.dnome 
+FROM empregados
+INNER JOIN departamentos ON empregados.dnumero = departamentos.dnumero
+INNER JOIN trabalha ON trabalha.cpf_emp = empregados.cpf
+INNER JOIN projetos ON trabalha.pnumero  = projetos.pnumero
+ 
+ 
+-- -------- Funcionarios que NÃO TRABALHAM em algum projeto --------- -- 
+ 
+SELECT empregados.cpf, empregados.enome, departamentos.dnome 
+FROM empregados
+INNER JOIN departamentos ON empregados.dnumero = departamentos.dnumero
+WHERE empregados.cpf NOT IN (
+	SELECT empregados.cpf 
+	FROM empregados
+	INNER JOIN trabalha ON trabalha.cpf_emp = empregados.cpf
+) 
+ORDER BY empregados.cpf
+ 
+-- --------------- Solução alternativa com LEFT JOIN ----------------- --
+
+SELECT empregados.cpf, empregados.enome, departamentos.dnome, trabalha.* 
+FROM empregados
+INNER JOIN departamentos ON empregados.dnumero = departamentos.dnumero
+LEFT JOIN trabalha ON trabalha.cpf_emp = empregados.cpf
+WHERE trabalha.cpf_emp IS NULL
+ORDER BY empregados.cpf
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
