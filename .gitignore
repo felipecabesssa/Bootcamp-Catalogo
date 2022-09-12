@@ -32,8 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-application.properties
-application-dev.properties
+### application.properties ###
+### application-dev.properties ###
 .metadata
 
 .DS_Store
