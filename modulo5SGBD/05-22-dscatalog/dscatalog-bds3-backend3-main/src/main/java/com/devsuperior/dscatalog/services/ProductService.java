@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +30,19 @@ public class ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
+//	@Transactional(readOnly = true)
+//	public Page<ProductDTO> findAllPaged(Pageable pageable) {
+//		Page<Product> list = repository.findAll(pageable);
+//		return list.map(x -> new ProductDTO(x));
+//	}
+	
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable pageable) {
-		Page<Product> list = repository.findAll(pageable);
-		return list.map(x -> new ProductDTO(x));
+	public Page<ProductDTO> findAllPaged(Long categoryId, PageRequest pagerequest) {
+		Category category = (categoryId == 0) ? null : categoryRepository.getOne(categoryId);
+	 	Page<Product> list = repository.busca(category, pagerequest);
+	 	return list.map(x -> new ProductDTO(x));
 	}
+
 
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
@@ -89,5 +97,7 @@ public class ProductService {
 			Category category = categoryRepository.getOne(catDto.getId());
 			entity.getCategories().add(category);			
 		}
-	}	
+	}
+
+	
 }
